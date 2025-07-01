@@ -179,10 +179,10 @@ export const followOrUnfollow = async (req, res) => {
         success: false,
       });
     }
-    // mai check krunga ki follow krna hai ya unfollow
+    // I will check here do I have to follow or unfollow
     const isFollowing = user.following.includes(jiskoFollowKrunga);
     if (isFollowing) {
-      // unfollow logic ayega
+      // unfollow logic
       await Promise.all([
         User.updateOne(
           { _id: followKrneWala },
