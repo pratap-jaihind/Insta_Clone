@@ -1,6 +1,10 @@
-import User from "../models/User.js";
+import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+// import cloudinary from "../utils/cloudinary.js";
+// import { getDataUri } from "../utils/dataUri.js";
+dotenv.config();
 
 export const register = async (req, res) => {
   const { username, email, password } = req.body;
@@ -29,7 +33,6 @@ export const register = async (req, res) => {
     });
 
     // Save user to database
-    await newUser.save();
 
     res
       .status(201)
@@ -50,7 +53,8 @@ export const login = async (req, res) => {
     }
 
     // Check if user exists
-    const user = await User.findOne({ email });
+    let user = await User.findOne({ email });
+
     if (!user) {
       return res
         .status(404)
@@ -59,11 +63,13 @@ export const login = async (req, res) => {
 
     // Check password
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log(isPasswordValid);
     if (!isPasswordValid) {
       return res
         .status(401)
         .json({ message: "Invalid credentials", success: false });
     }
+
     user = {
       _id: user._id,
       username: user.username,
@@ -72,11 +78,11 @@ export const login = async (req, res) => {
       bio: user.bio,
       followers: user.followers,
       following: user.following,
-      posts: user.posts,
+      post: user.post,
     };
 
     const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
-      expiresIn: "1D",
+      expiresIn: "1d",
     });
 
     return res
@@ -87,10 +93,24 @@ export const login = async (req, res) => {
       })
       .json({
         message: `Welcome Back ${user.username}`,
+        success: true,
         user,
       });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const getProfile = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    let user = await User.findById(userId);
+    return res.status(200).json({
+      user,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
   }
 };
 
