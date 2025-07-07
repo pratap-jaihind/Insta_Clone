@@ -12,21 +12,21 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { toast } from "sonner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-// import { useDispatch, useSelector } from "react-redux";
-// import { setAuthUser } from "@/redux/authSlice";
-// import CreatePost from "./CreatePost";
+import { useDispatch, useSelector } from "react-redux";
+import { setAuthUser } from "@/redux/authSlice";
+import CreatePost from "./CreatePost";
 // import { setPosts, setSelectedPost } from "@/redux/postSlice";
 // import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 
 const LeftSidebar = () => {
   const navigate = useNavigate();
-  //   const { user } = useSelector((store) => store.auth);
+  const { user } = useSelector((store) => store.auth);
   //   const { likeNotification } = useSelector(
   //     (store) => store.realTimeNotification
   //   );
-  //   const dispatch = useDispatch();
-  //   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
 
   const logoutHandler = async () => {
     try {
@@ -34,7 +34,7 @@ const LeftSidebar = () => {
         withCredentials: true,
       });
       if (res.data.success) {
-        // dispatch(setAuthUser(null));
+        dispatch(setAuthUser(null));
         // dispatch(setSelectedPost(null));
         // dispatch(setPosts([]));
         navigate("/login");
@@ -48,10 +48,10 @@ const LeftSidebar = () => {
   const sidebarHandler = (textType) => {
     if (textType === "Logout") {
       logoutHandler();
+    } else if (textType === "Create") {
+      setOpen(true);
     }
-    // else if (textType === "Create") {
-    //   setOpen(true);
-    // } else if (textType === "Profile") {
+    // else if (textType === "Profile") {
     //   navigate(`/profile/${user?._id}`);
     // } else if (textType === "Home") {
     //   navigate("/");
@@ -142,7 +142,7 @@ const LeftSidebar = () => {
         </div>
       </div>
 
-      {/* <CreatePost open={open} setOpen={setOpen} /> */}
+      <CreatePost open={open} setOpen={setOpen} />
     </div>
   );
 };
