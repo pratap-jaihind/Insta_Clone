@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "sonner";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
-// import { Badge } from "./ui/badge";
+import { Badge } from "./ui/badge";
 
 const Post = ({ post }) => {
   const [text, setText] = useState("");
@@ -20,6 +20,7 @@ const Post = ({ post }) => {
   const [postLike, setPostLike] = useState(post.likes.length);
   const [comment, setComment] = useState(post.comments);
   const dispatch = useDispatch();
+  console.log(user);
 
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
@@ -34,7 +35,7 @@ const Post = ({ post }) => {
     try {
       const action = liked ? "dislike" : "like";
       const res = await axios.get(
-        `https://instaclone-g9h5.onrender.com/api/v1/post/${post._id}/${action}`,
+        `http://localhost:8000/api/v1/post/${post._id}/${action}`,
         { withCredentials: true }
       );
       console.log(res.data);
@@ -43,7 +44,7 @@ const Post = ({ post }) => {
         setPostLike(updatedLikes);
         setLiked(!liked);
 
-        // apne post ko update krunga
+        // Real time updating the post
         const updatedPostData = posts.map((p) =>
           p._id === post._id
             ? {
@@ -65,7 +66,7 @@ const Post = ({ post }) => {
   const commentHandler = async () => {
     try {
       const res = await axios.post(
-        `https://instaclone-g9h5.onrender.com/api/v1/post/${post._id}/comment`,
+        `http://localhost:8000/api/v1/post/${post._id}/comment`,
         { text },
         {
           headers: {
@@ -95,7 +96,7 @@ const Post = ({ post }) => {
   const deletePostHandler = async () => {
     try {
       const res = await axios.delete(
-        `https://instaclone-g9h5.onrender.com/api/v1/post/delete/${post?._id}`,
+        `http://localhost:8000/api/v1/post/delete/${post?._id}`,
         { withCredentials: true }
       );
       if (res.data.success) {
@@ -114,7 +115,7 @@ const Post = ({ post }) => {
   const bookmarkHandler = async () => {
     try {
       const res = await axios.get(
-        `https://instaclone-g9h5.onrender.com/api/v1/post/${post?._id}/bookmark`,
+        `http://localhost:8000/api/v1/post/${post?._id}/bookmark`,
         { withCredentials: true }
       );
       if (res.data.success) {
@@ -124,6 +125,9 @@ const Post = ({ post }) => {
       console.log(error);
     }
   };
+  // console.log(user._id);
+  // console.log(post.author._id);
+
   return (
     <div className="my-8 w-full max-w-sm mx-auto">
       <div className="flex items-center justify-between">

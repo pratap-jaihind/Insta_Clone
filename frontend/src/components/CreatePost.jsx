@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "@/redux/postSlice";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 const CreatePost = ({ open, setOpen }) => {
   const imageRef = useRef();
@@ -45,13 +46,17 @@ const CreatePost = ({ open, setOpen }) => {
           withCredentials: true,
         }
       );
-      if (res.data.success) {
-        dispatch(setPosts([res.data.post, ...posts])); // [1] -> [1,2] -> total element = 2
-        toast.success(res.data.message);
+      console.log(res);
+      if (res.data?.success) {
+        dispatch(setPosts([res.data?.post, ...posts]));
+        toast.success(res.data?.message);
         setOpen(false);
       }
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.error("Create post error:", error);
+      toast.error(
+        error.response?.data?.message || error.message || "Something went wrong"
+      );
     } finally {
       setLoading(false);
     }
@@ -61,7 +66,7 @@ const CreatePost = ({ open, setOpen }) => {
     <Dialog open={open}>
       <DialogContent onInteractOutside={() => setOpen(false)}>
         <DialogHeader className="text-center font-semibold">
-          Create New Post
+          <DialogTitle>Create New Post</DialogTitle>
         </DialogHeader>
         <div className="flex gap-3 items-center">
           <Avatar>

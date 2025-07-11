@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/authSlice";
 import CreatePost from "./CreatePost";
-// import { setPosts, setSelectedPost } from "@/redux/postSlice";
+import { setPosts, setSelectedPost } from "@/redux/postSlice";
 // import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 
@@ -35,8 +35,8 @@ const LeftSidebar = () => {
       });
       if (res.data.success) {
         dispatch(setAuthUser(null));
-        // dispatch(setSelectedPost(null));
-        // dispatch(setPosts([]));
+        dispatch(setSelectedPost(null));
+        dispatch(setPosts([]));
         navigate("/login");
         toast.success(res.data.message);
       }
@@ -70,7 +70,7 @@ const LeftSidebar = () => {
     {
       icon: (
         <Avatar className="w-6 h-6">
-          <AvatarImage alt="@shadcn" />
+          <AvatarImage src={user?.profilePicture} alt="@shadcn" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       ),
