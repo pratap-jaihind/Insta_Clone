@@ -20,7 +20,6 @@ const Post = ({ post }) => {
   const [postLike, setPostLike] = useState(post.likes.length);
   const [comment, setComment] = useState(post.comments);
   const dispatch = useDispatch();
-  console.log(user);
 
   const changeEventHandler = (e) => {
     const inputText = e.target.value;

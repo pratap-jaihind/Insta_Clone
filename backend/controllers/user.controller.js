@@ -3,8 +3,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { Post } from "../models/post.model.js";
-// import cloudinary from "../utils/cloudinary.js";
-// import { getDataUri } from "../utils/dataUri.js";
+import cloudinary from "../utils/cloudinary.js";
+import getDataUri from "../utils/datauri.js";
 dotenv.config();
 
 export const register = async (req, res) => {
@@ -115,7 +115,9 @@ export const login = async (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     const userId = req.params.id;
-    let user = await User.findById(userId);
+    let user = await User.findById(userId)
+      .populate({ path: "posts", createdAt: -1 })
+      .populate("bookmarks");
     return res.status(200).json({
       user,
       success: true,
