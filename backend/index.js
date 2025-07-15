@@ -19,7 +19,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: "http://localhost:5173", // For dev; use prod URL in deployment
+    origin: process.env.URL, // For dev; use prod URL in deployment
     credentials: true,
   })
 );
