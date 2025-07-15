@@ -6,17 +6,12 @@ import connectDB from "./utils/db.js";
 import userRoute from "./routes/user.route.js";
 import postRoute from "./routes/post.route.js";
 import messageRoute from "./routes/message.route.js";
-import { app, server, io } from "./socket/socket.js"; // Import the socket server
-dotenv.config({});
+import { app, server, io } from "./socket/socket.js";
+import path from "path";
+dotenv.config();
 
-const PORT = process.env.PORT || 3000;
-
-app.get("/", (req, res) => {
-  res.status(200).json({
-    message: "I am comming from backend",
-    success: true,
-  });
-});
+const PORT = process.env.PORT || 8000;
+const __dirname = path.resolve();
 
 // Middleware
 app.use(express.json());
@@ -24,16 +19,25 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: "http://localhost:5173", // Adjust this to your frontend URL
+    origin: "http://localhost:5173", // For dev; use prod URL in deployment
     credentials: true,
   })
 );
 
+// API routes
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/post", postRoute);
 app.use("/api/v1/message", messageRoute);
 
+// Serve static frontend
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+// Frontend routing fallback (for React Router)
+app.get("/*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+});
+
 server.listen(PORT, () => {
   connectDB();
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });

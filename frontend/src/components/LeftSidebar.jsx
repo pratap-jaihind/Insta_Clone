@@ -16,15 +16,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/authSlice";
 import CreatePost from "./CreatePost";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
-// import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 
 const LeftSidebar = () => {
   const navigate = useNavigate();
   const { user } = useSelector((store) => store.auth);
-  //   const { likeNotification } = useSelector(
-  //     (store) => store.realTimeNotification
-  //   );
+  const { likeNotification } = useSelector(
+    (store) => store.realTimeNotification
+  );
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
 
@@ -91,7 +91,7 @@ const LeftSidebar = () => {
               >
                 {item.icon}
                 <span>{item.text}</span>
-                {/* {item.text === "Notifications" &&
+                {item.text === "Notifications" &&
                   likeNotification.length > 0 && (
                     <Popover>
                       <PopoverTrigger asChild>
@@ -134,7 +134,7 @@ const LeftSidebar = () => {
                         </div>
                       </PopoverContent>
                     </Popover>
-                  )} */}
+                  )}
               </div>
             );
           })}
