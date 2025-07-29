@@ -10,11 +10,14 @@ const Home = () => {
   useGetSuggestedUsers();
   return (
     <div className="flex">
-      <div className="flex-grow">
-        <Feed />
-        <Outlet />
+      {/* Left Sidebar fixed width = 16% (~64px to 250px on normal screen) */}
+      <div className="flex flex-col sm:flex-row w-full">
+        <div className="w-full">
+          <Feed />
+          <Outlet />
+        </div>
+        <RightSidebar />
       </div>
-      <RightSidebar />
     </div>
   );
 };
